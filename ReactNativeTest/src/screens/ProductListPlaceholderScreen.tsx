@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
-import { GlobalStyles, Typography } from "../styles/globals";
+import { Colors, GlobalStyles, Spacing, Typography } from "../styles/globals";
+import { MockListItem } from "../components/MockListItom";
+import { generateMockList } from "../utils/mocklist";
 
 type ProductListRouteProp = RouteProp<
   RootStackParamList,
@@ -28,6 +30,7 @@ export const ProductListPlaceholderScreen: React.FC = () => {
   const { params } = useRoute<ProductListRouteProp>();
   const { source, id, screenType } = params;
 
+  const mockList = generateMockList(10);
   const title =
     screenType === "PLP"
       ? "Product Listing Page"
@@ -37,16 +40,7 @@ export const ProductListPlaceholderScreen: React.FC = () => {
 
   return (
     <View style={[GlobalStyles.screen, { paddingTop: 20 }]}>
-      <Text style={Typography.title}>{title}</Text>
-
-      <View style={GlobalStyles.badgeRow}>
-        <View style={[GlobalStyles.badge, GlobalStyles.badgePrimary]}>
-          <Text style={GlobalStyles.badgeText}>{screenType}</Text>
-        </View>
-        <View style={GlobalStyles.badge}>
-          <Text style={GlobalStyles.badgeText}>Source: {source}</Text>
-        </View>
-      </View>
+      <Text style={[Typography.title, { marginBottom: 10 }]}>{title}</Text>
 
       <View style={GlobalStyles.card}>
         <Text style={GlobalStyles.label}>Received parameters</Text>
@@ -55,10 +49,64 @@ export const ProductListPlaceholderScreen: React.FC = () => {
         <Text style={GlobalStyles.value}>source: {source}</Text>
       </View>
 
-      <Text style={Typography.small}>
-        This is a placeholder screen. In a real app this would render a product
-        grid, category content, or a product details page.
-      </Text>
+      {screenType === "PD" ? (
+        <View style={styles.pdContainer}>
+          <MockListItem
+            title="Mock Product Detail"
+            description="This is a simulated product detail screen."
+            image="https://placehold.co/400x400/png"
+          />
+          <Text style={Typography.subtitle}>Description</Text>
+          <Text style={Typography.body}>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo
+            dolorum suscipit earum laboriosam soluta. Eveniet debitis vitae
+            temporibus facilis odit totam ad maxime, assumenda, nisi esse
+            adipisci accusamus corporis praesentium?
+          </Text>
+          <Text style={[Typography.subtitle, { marginTop: 10 }]}>
+            Caracheteristics
+          </Text>
+          <Text style={Typography.body}>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo
+            dolorum suscipit earum laboriosam soluta. Eveniet debitis vitae
+            temporibus facilis odit totam ad maxime, assumenda, nisi esse
+            adipisci accusamus corporis praesentium?
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={mockList}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <MockListItem
+              title={item.title}
+              description={item.description}
+              image={item.image}
+            />
+          )}
+          contentContainerStyle={{ paddingTop: Spacing.md }}
+        />
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: Spacing.lg,
+    backgroundColor: Colors.background,
+  },
+  meta: {
+    ...Typography.small,
+    marginBottom: Spacing.md,
+  },
+  pdContainer: {
+    marginTop: Spacing.md,
+  },
+  detailText: {
+    ...Typography.body,
+    marginTop: Spacing.md,
+  },
+});
