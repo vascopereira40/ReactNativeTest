@@ -14,6 +14,9 @@ npm install
 npm start
 ```
 
+Open the Expo Go app
+Scan the QR code and it will build the app
+
 ## Running Tests
 
 ```

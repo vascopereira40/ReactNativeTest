@@ -63,13 +63,6 @@ export const GlobalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  row: {
-    backgroundColor: Colors.surface,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
   sectionTitle: {
     ...Typography.subtitle,
     marginBottom: Spacing.sm,
@@ -170,25 +163,5 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: 13,
     color: "#444",
     marginBottom: 2,
-  },
-  badgeRow: {
-    flexDirection: "row",
-    marginBottom: 16,
-    marginTop: 10,
-  },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 12,
-    backgroundColor: "#ddd",
-    marginRight: 8,
-  },
-  badgePrimary: {
-    backgroundColor: "#007bff",
-  },
-  badgeText: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: 12,
   },
 });

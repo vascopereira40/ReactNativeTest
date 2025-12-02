@@ -27,13 +27,17 @@ type NavigationProp = NativeStackNavigationProp<
 /**
  * CategoryLevelScreen
  *
- * For a category that has children:
- *  - Header handled by navigator (back + category name)
- *  - First row: “View all in {CategoryName}” → uses category.route
- *  - Then list all children:
- *      • If child has children → navigate deeper to CategoryLevelScreen
- *      • If leaf → navigate to ProductListPlaceholder
- *  - Supports at least 2 levels of depth via recursive navigation.
+ * Displays a single category level:
+ *  - "View all in {CategoryName}" row at the top (uses currentCategory.route)
+ *  - Then all child categories as rows
+ *
+ * Behavior:
+ *  - If a child has children → navigate deeper into CategoryLevelScreen
+ *  - If a child is a leaf → navigate to ProductListPlaceholder
+ *  - Uses React Query (useCategoryTree) with cached data + error handling
+ *  - Shows skeletons while loading
+ *
+ * This screen is reused recursively to support multi-level category trees.
  */
 
 const findCategoryById = (
@@ -69,6 +73,7 @@ export const CategoryLevelScreen: React.FC = () => {
   } = useCategoryTree();
 
   // Find the current category node within the full tree
+  // So we can show it's sub tree
   const currentCategory = useMemo(() => {
     if (!categoryTree?.categories) return null;
     return findCategoryById(categoryTree.categories, categoryId);
@@ -76,6 +81,17 @@ export const CategoryLevelScreen: React.FC = () => {
 
   const children = currentCategory?.children ?? [];
 
+  /**
+   * Build a list of items for the FlatList:
+   *
+   * - When loading with no category yet:
+   *    • show skeletons for the "view all" row and a few children
+   *
+   * - When category exists:
+   *    • first item is "view-all"
+   *    • then every child category as a row
+   *    • if still loading and children aren't available yet → skeletons
+   */
   const listItems: ListItem[] = useMemo(() => {
     const items: ListItem[] = [];
 
@@ -90,6 +106,7 @@ export const CategoryLevelScreen: React.FC = () => {
       return items;
     }
 
+    // If we still don't have a category (and we're not loading), nothing to show
     if (!currentCategory) return items;
 
     // 1️⃣ View all row
@@ -115,6 +132,7 @@ export const CategoryLevelScreen: React.FC = () => {
     refetch();
   };
 
+  // "View all in {CategoryName}" → use the currentCategory.route metadata
   const handleViewAllPress = () => {
     if (!currentCategory) return;
 
@@ -125,17 +143,18 @@ export const CategoryLevelScreen: React.FC = () => {
     });
   };
 
+  // Child category row tapped
   const handleChildPress = (child: CategoryNode) => {
     const hasChildren = child.children && child.children.length > 0;
 
     if (hasChildren) {
-      // Navigate deeper into the tree
+      // Category still has children → go deeper into CategoryLevelScreen
       navigation.push("CategoryLevel", {
         categoryId: child.id,
         categoryName: child.name,
       });
     } else {
-      // Leaf category → product list placeholder
+      // Leaf category → navigate directly to PLP / CLP placeholder
       navigation.navigate("ProductListPlaceholder", {
         source: "category",
         id: child.route.params.id,
@@ -144,6 +163,12 @@ export const CategoryLevelScreen: React.FC = () => {
     }
   };
 
+  /**
+   * FlatList renderer:
+   *  - view-all → "View all in {CategoryName}" row with chevron
+   *  - child   → CategoryRow (shared component)
+   *  - skeleton → Skeleton blocks for loading states
+   */
   const renderItem = ({ item }: { item: ListItem }) => {
     switch (item.type) {
       case "view-all":
@@ -180,12 +205,12 @@ export const CategoryLevelScreen: React.FC = () => {
     }
   };
 
-  // Hard error and no cached data
+  // Hard error and no cached data → show dedicated error screen with retry
   if (isError && !categoryTree) {
     return <ErrorScreen handleRetry={handleRetry} />;
   }
 
-  // Category not found (edge case)
+  // Category not found in the tree (edge case, e.g. stale / invalid id)
   if (!isLoading && categoryTree && !currentCategory) {
     return (
       <SafeAreaView
