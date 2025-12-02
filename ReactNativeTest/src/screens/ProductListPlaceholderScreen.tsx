@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 import { Colors, GlobalStyles, Spacing, Typography } from "../styles/globals";
-import { MockListItem } from "../components/MockListItom";
+import { MockListItem } from "../components/MockListItem";
 import { generateMockList } from "../utils/mocklist";
 
 type ProductListRouteProp = RouteProp<
@@ -49,6 +49,7 @@ export const ProductListPlaceholderScreen: React.FC = () => {
         <Text style={GlobalStyles.value}>source: {source}</Text>
       </View>
 
+      {/* IG SCREEN TYPE IS PD SHOW DETAIL MOCK IF NOT SHOW LIST */}
       {screenType === "PD" ? (
         <View style={styles.pdContainer}>
           <MockListItem

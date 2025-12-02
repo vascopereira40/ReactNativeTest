@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { Colors, GlobalStyles, Typography } from "../styles/globals";
+import { generateMockList } from "../utils/mocklist";
+import { MockListItem } from "../components/MockListItem";
 
 /**
  * BrandListPlaceholderScreen
@@ -19,17 +21,10 @@ import { Colors, GlobalStyles, Typography } from "../styles/globals";
  */
 
 export const BrandListPlaceholderScreen: React.FC = () => {
+  const mockBrands = generateMockList(12);
   return (
     <View style={[GlobalStyles.screen, { paddingTop: 20 }]}>
       <Text style={Typography.title}>Brands</Text>
-
-      <View style={styles.infoBox}>
-        <Text style={GlobalStyles.label}>Route Parameters Received</Text>
-        <Text style={GlobalStyles.value}>
-          None (this route does not accept params)
-        </Text>
-      </View>
-
       <View style={GlobalStyles.card}>
         <Text style={styles.detailText}>
           This is the placeholder screen for the Brands section.
@@ -40,26 +35,19 @@ export const BrandListPlaceholderScreen: React.FC = () => {
         <Text style={styles.codeText}>route: {"{ screen: 'BRAND_LIST' }"}</Text>
       </View>
 
-      <Text style={Typography.small}>
-        In a real application, this would render a list of available brands.
-      </Text>
+      <FlatList
+        data={mockBrands}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <MockListItem title={item.title} description={item.description} />
+        )}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  infoBox: {
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: Colors.surface,
-    marginVertical: 16,
-  },
-  detailBox: {
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    marginBottom: 16,
-  },
   detailText: {
     fontSize: 13,
     color: "#444",

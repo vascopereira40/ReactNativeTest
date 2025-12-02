@@ -299,7 +299,7 @@ export const CategoryEntryScreen: React.FC = () => {
           <SkeletonBlock
             testID="category-skeleton"
             height={50}
-            style={{ marginHorizontal: 0, marginBottom: 12 }}
+            style={{ marginBottom: 12 }}
           />
         );
 
@@ -310,8 +310,8 @@ export const CategoryEntryScreen: React.FC = () => {
         return (
           <SkeletonBlock
             testID="brands-skeleton"
-            height={50}
-            style={{ marginHorizontal: 0, marginTop: 12 }}
+            height={70}
+            style={{ marginTop: 12 }}
           />
         );
 
