@@ -4,7 +4,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 import { Colors, GlobalStyles, Spacing, Typography } from "../styles/globals";
 import { MockListItem } from "../components/MockListItem";
-import { generateMockList } from "../utils/mocklist";
+import { generateMockList } from "../utils/mockList";
 
 type ProductListRouteProp = RouteProp<
   RootStackParamList,

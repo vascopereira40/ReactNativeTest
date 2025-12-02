@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Colors, GlobalStyles, Typography } from "../styles/globals";
-import { generateMockList } from "../utils/mocklist";
+import { GlobalStyles, Typography } from "../styles/globals";
+import { generateMockList } from "../utils/mockList";
 import { MockListItem } from "../components/MockListItem";
 
 /**

@@ -1,30 +1,5 @@
-/**
- * CategoryEntryScreen
- *
- * This is the main entry point for browsing categories.
- *
- * Requirements implemented from Section 2.2 of the test:
- *  - Sticky search bar
- *  - Highlight grid (only when EXACTLY 4 cards are returned)
- *  - Root category list
- *  - Brands row at bottom
- *  - Independent loading skeletons for:
- *      • Highlight grid
- *      • Category rows
- *      • Brands row
- *  - Partial loading (sections appear independently as they load)
- *  - Stale-while-revalidate with “Using cached data” banner
- */
-
 import React, { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
+import { View, Text, FlatList, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
@@ -53,6 +28,24 @@ type ListItem =
   | { type: "category-skeleton"; id: string }
   | { type: "brands"; id: string; brands: BrandsNode }
   | { type: "brands-skeleton"; id: string };
+
+/**
+ * CategoryEntryScreen
+ *
+ * This is the main entry point for browsing categories.
+ *
+ * Requirements implemented from Section 2.2 of the test:
+ *  - Sticky search bar
+ *  - Highlight grid (only when EXACTLY 4 cards are returned)
+ *  - Root category list
+ *  - Brands row at bottom
+ *  - Independent loading skeletons for:
+ *      • Highlight grid
+ *      • Category rows
+ *      • Brands row
+ *  - Partial loading (sections appear independently as they load)
+ *  - Stale-while-revalidate with “Using cached data” banner
+ */
 
 export const CategoryEntryScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();

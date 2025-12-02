@@ -1,3 +1,39 @@
+## Installation & Running
+
+Under the directory /ReactNativeTest at the package.json level
+
+### 1. Install dependencies
+
+```
+npm install
+```
+
+### 2. Start the Expo app
+
+```
+npm start
+```
+
+## Running Tests
+
+```
+npm test
+```
+
+This runs Jest with:
+
+- jest-expo preset
+- @testing-library/react-native
+- mocks for icons and React Navigation
+- proper handling of ESM packages
+
+All test suites are passing:
+
+```
+PASS **tests**/mockApi.test.ts
+PASS **tests**/CategoryEntryScreen.test.tsx
+```
+
 ## Features
 
 ### Multi-level Category Navigation
@@ -23,7 +59,7 @@
 ### Placeholder Screens
 
 - Simple, clean placeholder screens as required:
-- ProductListPlaceholderScreen
+- ProductListPlaceholderScreen (PLP / CLP / PD influences this screen it can either render just a product detail or a list of products)
 - BrandListPlaceholderScreen
 - They display all route parameters received, aiding review & debugging.
 
@@ -76,7 +112,14 @@ src/
 │   ├── CategoryRow.tsx
 │   ├── HighlightCard.tsx
 │   ├── SkeletonBlock.tsx
-│   └── ...
+│   ├── BrandsRow.tsx
+│   ├── MockListItem.tsx
+│   ├── SearchBar.tsx
+│   └── ErrorScreen.tsx
+│
+├── utils/
+│   ├── delay.ts
+│   └── mockList.ts
 │
 └── styles/
     └── globals.ts
@@ -90,45 +133,68 @@ README.md
 
 ```
 
-## Installation & Running
+## Architecture Overview
 
-Under the directory /ReactNativeTest at the package.json level
+This project follows a simple but scalable structure:
 
-### 1. Install dependencies
+- **Screens** contain UI and user interaction logic.
+- **Hooks** (with React Query) handle data fetching, caching, and error/loading states.
+- **API layer** simulates backend endpoints and contains all mock server logic.
+- **Components** provide reusable UI pieces shared across screens.
+- **Navigation** is centralized in `RootNavigator.tsx`, following a stack-based approach.
+- **Styles** contain design tokens (colors, spacing, typography), ensuring visual consistency.
 
-```
-npm install
-```
+This separation keeps the codebase modular, easy to navigate, and easy to extend.
 
-### 2. Start the Expo app
+## Data Flow Overview
 
-```
-npm start
-```
+The data flow follows a predictable pattern:
 
-## Running Tests
+1. **Screen** requests data using a custom hook  
+   (`useHighlights`, `useCategoryTree`)
 
-```
-npm test
-```
+2. **Hooks** call the mock API  
+   (`getHighlightContent`, `getCategoryTree`)
 
-This runs Jest with:
+3. **React Query** manages:
 
-- jest-expo preset
-- @testing-library/react-native
-- mocks for icons and React Navigation
-- proper handling of ESM packages
+   - caching
+   - background refetch
+   - stale state (used for "cached data" banner)
+   - loading & error states
 
-All test suites are passing:
+4. **Screens** render:
 
-```
-PASS **tests**/mockApi.test.ts
-PASS **tests**/CategoryEntryScreen.test.tsx
-```
+   - skeletons (while loading)
+   - UI sections (on success)
+   - error screen (on failure)
+
+5. **User interaction** triggers navigation through route metadata
+   (`route.screen` + `params.id`).
+
+This approach keeps UI logic clean while providing a realistic e-commerce data lifecycle.
 
 ## Technical Decisions & Notes
 
-### 1. Brands Section Interpretation
+### 1. React Query
+
+React Query was chosen over manual `useEffect` + fetch because it:
+
+- simplifies async management
+- provides caching and stale-while-revalidate automatically
+- reduces boilerplate for loading/error states
+
+The trade-off is a slightly larger bundle size, but the benefits outweigh the cost for this type of app.
+
+### 2. Placeholder Screens Instead of Real Screens
+
+Using single placeholder screens (PLP/CLP/PD combined) avoids duplicating code.  
+The trade-off is less separation, but it fits the assignment's simplicity requirement.
+The backend-provided `route.screen` controls what type of page is shown.  
+The trade-off is that navigation maps all three to a shared placeholder instead of separate screens,  
+but this keeps the codebase small and faithful to the assignment.
+
+### 3. Brands Section Interpretation
 
 The assignment does not define the brands object shape.
 Mock API provides it as a single node, not a list.
@@ -139,7 +205,7 @@ To remain faithful to the spec:
 - It navigates to BrandListPlaceholderScreen, as required
 - Placeholder indicates no route params are expected
 
-### 2. Highlight Rendering Rules
+### 4. Highlight Rendering Rules
 
 Per specification:
 
@@ -147,14 +213,14 @@ Per specification:
 - Otherwise hide the entire section
 - Loading shows a 4-card skeleton grid
 
-### 3. React Query Caching Behavior
+### 5. Caching Signaling
 
 When data is from cache:
 
 - A banner appears at the top (“Showing cached data…”)
 - Pull-to-refresh triggers a fresh fetch
 
-### 4. Safe Area Handling
+### 6. Safe Area Handling
 
 Expo’s built-in SafeAreaView is deprecated.
 The app uses:
@@ -169,7 +235,7 @@ For screens that use React Navigation headers, top insets are controlled by Navi
 <SafeAreaView edges={["bottom", "left", "right"]} />
 ```
 
-### 5. Global Styles
+### 7. Global Styles
 
 A unified design system is defined in:
 
