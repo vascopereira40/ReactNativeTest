@@ -39,6 +39,7 @@ import { HighlightCard as HighlightCardType } from "../types/highlights";
 import { CategoryNode, BrandsNode } from "../types/categories";
 import { GlobalStyles } from "../styles/globals";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ErrorScreen } from "../components/ErrorScreen";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -316,21 +317,7 @@ export const CategoryEntryScreen: React.FC = () => {
 
   // --- Hard error (no cache) ---
   if (isError && !categoryTree && !highlights) {
-    return (
-      <SafeAreaView
-        edges={["bottom", "left", "right"]}
-        style={[GlobalStyles.screen, GlobalStyles.center]}
-      >
-        <Text style={GlobalStyles.errorTitle}>Something went wrong</Text>
-        <Text style={GlobalStyles.errorText}>Please try again.</Text>
-        <TouchableOpacity
-          style={GlobalStyles.retryButton}
-          onPress={handleRetry}
-        >
-          <Text style={GlobalStyles.retryText}>Retry</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
+    return <ErrorScreen handleRetry={handleRetry} />;
   }
 
   return (

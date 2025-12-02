@@ -16,6 +16,7 @@ import { SkeletonBlock } from "../components/SkeletonBlock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GlobalStyles } from "../styles/globals";
 import Octicons from "@expo/vector-icons/Octicons";
+import { ErrorScreen } from "../components/ErrorScreen";
 
 type CategoryLevelRouteProp = RouteProp<RootStackParamList, "CategoryLevel">;
 type NavigationProp = NativeStackNavigationProp<
@@ -181,21 +182,7 @@ export const CategoryLevelScreen: React.FC = () => {
 
   // Hard error and no cached data
   if (isError && !categoryTree) {
-    return (
-      <SafeAreaView
-        edges={["bottom", "left", "right"]}
-        style={[GlobalStyles.screen, GlobalStyles.center]}
-      >
-        <Text style={GlobalStyles.errorTitle}>Something went wrong</Text>
-        <Text style={GlobalStyles.errorText}>Please try again.</Text>
-        <TouchableOpacity
-          style={GlobalStyles.retryButton}
-          onPress={handleRetry}
-        >
-          <Text style={GlobalStyles.retryText}>Retry</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
+    return <ErrorScreen handleRetry={handleRetry} />;
   }
 
   // Category not found (edge case)
