@@ -122,9 +122,12 @@ export const GlobalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingRight: Spacing.xl,
     backgroundColor: Colors.surface,
     height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   categoryRow: {
     paddingHorizontal: Spacing.xs,
