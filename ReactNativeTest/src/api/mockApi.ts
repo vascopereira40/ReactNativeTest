@@ -116,6 +116,26 @@ const mockCategoryTree: CategoryTreeResponse = {
           children: [],
         },
       ],
+    }, {
+      id: "cat-music",
+      name: "Music",
+      image: "https://via.placeholder.com/200",
+      route: {
+        screen: "PLP",
+        params: { id: "cat-music" },
+      },
+      children: [
+        {
+          id: "cat-instruments",
+          name: "Instruments",
+          image: "https://via.placeholder.com/200",
+          route: {
+            screen: "CLP",
+            params: { id: "cat-instruments" },
+          },
+          children: [],
+        },
+      ],
     },
   ],
   brands: {
@@ -129,11 +149,11 @@ const mockCategoryTree: CategoryTreeResponse = {
 };
 
 // --- Endpoints ---
-
-const API_DELAY_MS = 800;
+const API_DELAY_MS_cATEGORY = 800; 
+const API_DELAY_MS_HIGHLIGHT = 2000;
 
 export const getHighlightContent = async (): Promise<HighlightCard[]> => {
-  await delay(API_DELAY_MS);
+  await delay(API_DELAY_MS_HIGHLIGHT);
 
   if (shouldFailHighlights) {
     throw new Error("Failed to fetch highlight content");
@@ -144,7 +164,7 @@ export const getHighlightContent = async (): Promise<HighlightCard[]> => {
 };
 
 export const getCategoryTree = async (): Promise<CategoryTreeResponse> => {
-  await delay(API_DELAY_MS);
+  await delay(API_DELAY_MS_cATEGORY);
 
   if (shouldFailCategories) {
     throw new Error("Failed to fetch categories");
