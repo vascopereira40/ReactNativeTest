@@ -6,14 +6,18 @@ type Props = {
   height: number;
   width?: number | string;
   style?: object;
+  testID?: string;
 };
 
 export const SkeletonBlock: React.FC<Props> = ({
   height,
   width = "100%",
   style,
+  testID,
 }) => {
-  return <View style={[styles.base, { height, width }, style]} />;
+  return (
+    <View testID={testID} style={[styles.base, { height, width }, style]} />
+  );
 };
 
 const styles = StyleSheet.create({

@@ -24,6 +24,7 @@
   "devDependencies": {
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "19.1.0",
     "jest": "29.7.0",
     "jest-expo": "^54.0.0",
@@ -37,7 +38,7 @@
       "@testing-library/jest-native/extend-expect"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native|expo)"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native|@react-navigation|expo)"
     ]
   }
 }

@@ -268,7 +268,10 @@ export const CategoryEntryScreen: React.FC = () => {
 
       case "highlight-skeleton":
         return (
-          <View style={GlobalStyles.highlightContainer}>
+          <View
+            style={GlobalStyles.highlightContainer}
+            testID="highlight-skeleton"
+          >
             <SkeletonBlock
               height={20}
               width={140}
@@ -294,6 +297,7 @@ export const CategoryEntryScreen: React.FC = () => {
       case "category-skeleton":
         return (
           <SkeletonBlock
+            testID="category-skeleton"
             height={50}
             style={{ marginHorizontal: 0, marginBottom: 12 }}
           />
@@ -305,6 +309,7 @@ export const CategoryEntryScreen: React.FC = () => {
       case "brands-skeleton":
         return (
           <SkeletonBlock
+            testID="brands-skeleton"
             height={50}
             style={{ marginHorizontal: 0, marginTop: 12 }}
           />

@@ -7,8 +7,16 @@ import {
 } from "../types/categories";
 
 // --- Failure flags (can be toggled in tests / dev) ---
-const shouldFailHighlights = false;
-const shouldFailCategories = false;
+let shouldFailHighlights = false;
+let shouldFailCategories = false;
+
+export const setHighlightFailure = (value: boolean) => {
+  shouldFailHighlights = value;
+};
+
+export const setCategoryFailure = (value: boolean) => {
+  shouldFailCategories = value;
+};
 
 // --- Mock data ---
 
