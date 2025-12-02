@@ -7,16 +7,8 @@ import {
 } from "../types/categories";
 
 // --- Failure flags (can be toggled in tests / dev) ---
-let shouldFailHighlights = false;
-let shouldFailCategories = false;
-
-export const setHighlightFailure = (value: boolean) => {
-  shouldFailHighlights = value;
-};
-
-export const setCategoryFailure = (value: boolean) => {
-  shouldFailCategories = value;
-};
+const shouldFailHighlights = false;
+const shouldFailCategories = false;
 
 // --- Mock data ---
 
@@ -68,72 +60,124 @@ const mockCategoryTree: CategoryTreeResponse = {
       id: "cat-electronics",
       name: "Electronics",
       image: "https://via.placeholder.com/200",
-      route: {
-        screen: "CLP", // parent → CLP
-        params: { id: "cat-electronics" },
-      },
+      route: { screen: "CLP", params: { id: "cat-electronics" } },
       children: [
         {
           id: "cat-phones",
           name: "Phones",
           image: "https://via.placeholder.com/200",
-          route: {
-            screen: "CLP", // mid-level → CLP
-            params: { id: "cat-phones" },
-          },
+          route: { screen: "CLP", params: { id: "cat-phones" } },
           children: [
             {
               id: "cat-smartphones",
               name: "Smartphones",
               image: "https://via.placeholder.com/200",
-              route: {
-                screen: "PLP", // leaf → PLP
-                params: { id: "cat-smartphones" },
-              },
+              route: { screen: "PLP", params: { id: "cat-smartphones" } },
+              children: [],
+            },
+            {
+              id: "cat-featurephones",
+              name: "Feature Phones",
+              image: "https://via.placeholder.com/200",
+              route: { screen: "PLP", params: { id: "cat-featurephones" } },
               children: [],
             },
           ],
         },
       ],
     },
+
     {
-      id: "cat-clothing",
-      name: "Clothing",
+      id: "cat-fashion",
+      name: "Fashion",
       image: "https://via.placeholder.com/200",
-      route: {
-        screen: "CLP",
-        params: { id: "cat-clothing" },
-      },
+      route: { screen: "CLP", params: { id: "cat-fashion" } },
       children: [
         {
           id: "cat-men",
           name: "Men",
           image: "https://via.placeholder.com/200",
-          route: {
-            screen: "PLP", // leaf
-            params: { id: "cat-men" },
-          },
+          route: { screen: "CLP", params: { id: "cat-men" } },
+          children: [
+            {
+              id: "cat-men-shirts",
+              name: "Shirts",
+              image: "https://via.placeholder.com/200",
+              route: { screen: "PLP", params: { id: "cat-men-shirts" } },
+              children: [],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "cat-home",
+      name: "Home & Kitchen",
+      image: "https://via.placeholder.com/200",
+      route: { screen: "CLP", params: { id: "cat-home" } },
+      children: [
+        {
+          id: "cat-cookware",
+          name: "Cookware",
+          image: "https://via.placeholder.com/200",
+          route: { screen: "PLP", params: { id: "cat-cookware" } },
           children: [],
         },
       ],
     },
+
     {
-      id: "cat-music",
-      name: "Music",
+      id: "cat-sports",
+      name: "Sports",
       image: "https://via.placeholder.com/200",
-      route: {
-        screen: "CLP",
-        params: { id: "cat-music" },
-      },
+      route: { screen: "CLP", params: { id: "cat-sports" } },
       children: [
         {
-          id: "cat-instruments",
-          name: "Instruments",
+          id: "cat-outdoor",
+          name: "Outdoor",
           image: "https://via.placeholder.com/200",
-          route: {
-            screen: "PLP", // could be CLP if you add more depth
-            params: { id: "cat-instruments" },
-          },
+          route: { screen: "PLP", params: { id: "cat-outdoor" } },
+          children: [],
+        },
+      ],
+    },
+
+    {
+      id: "cat-books",
+      name: "Books",
+      image: "https://via.placeholder.com/200",
+      route: { screen: "PLP", params: { id: "cat-books" } },
+      children: [],
+    },
+
+    {
+      id: "cat-beauty",
+      name: "Beauty",
+      image: "https://via.placeholder.com/200",
+      route: { screen: "PLP", params: { id: "cat-beauty" } },
+      children: [],
+    },
+
+    {
+      id: "cat-grocery",
+      name: "Grocery",
+      image: "https://via.placeholder.com/200",
+      route: { screen: "PLP", params: { id: "cat-grocery" } },
+      children: [],
+    },
+
+    {
+      id: "cat-toys",
+      name: "Toys",
+      image: "https://via.placeholder.com/200",
+      route: { screen: "CLP", params: { id: "cat-toys" } },
+      children: [
+        {
+          id: "cat-learning",
+          name: "Learning Toys",
+          image: "https://via.placeholder.com/200",
+          route: { screen: "PLP", params: { id: "cat-learning" } },
           children: [],
         },
       ],
@@ -149,7 +193,7 @@ const mockCategoryTree: CategoryTreeResponse = {
 };
 
 // --- Endpoints ---
-const API_DELAY_MS_cATEGORY = 1500; 
+const API_DELAY_MS_cATEGORY = 1500;
 const API_DELAY_MS_HIGHLIGHT = 2000;
 
 export const getHighlightContent = async (): Promise<HighlightCard[]> => {
