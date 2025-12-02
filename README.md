@@ -319,3 +319,67 @@ This implementation follows the assignment closely:
 - Testing (API + UI)
 
 And focuses on code clarity, reproducibility, and consistent UX.
+
+## What I Would Improve in a Production Environment
+
+This project intentionally focuses on the scope of the assignment, but in a real
+production-grade app I would enhance several aspects of architecture,
+performance, testing, and UX:
+
+### 1. Real Backend Integration & Data Contracts
+
+- Replace the mock API with real endpoints.
+- Introduce a typed API schema (OpenAPI / Zod) to validate responses.
+- Enforce strict data contracts between backend and frontend to avoid runtime errors.
+
+### 2. Better Error Handling & Offline Support
+
+- Implement user-friendly error screens for partial failures.
+- Add offline caching and persistence via React Query + AsyncStorage.
+- Retry strategies with exponential backoff.
+
+### 3. Enhanced Navigation Structure
+
+- Create dedicated screens for PLP, CLP, and PD instead of a single placeholder.
+- Consider deep linking & universal links for product pages.
+- Add navigation analytics (screen tracking).
+
+### 4. Accessibility Improvements
+
+- VoiceOver / TalkBack support.
+- Better contrast, scalable fonts, and focus indicators.
+- Accessible touch areas for cards and buttons.
+
+### 5. UI/UX Enhancements
+
+- Improve transitions/animations between category levels.
+- Add a sticky search bar with debounce.
+- Brand carousel rather than a single row.
+- Better placeholder skeletons (fade-in shimmer).
+
+### 6. Performance Optimizations
+
+- Memoize heavy components.
+- Preload images using Expo’s image caching.
+- Reduce re-renders with `React.memo` and stable callback refs.
+
+### 7. Code Quality & Tooling
+
+- Add ESLint + Prettier + TypeScript strict mode.
+- Add Husky pre-commit hooks for linting and tests.
+
+### 8. Analytics & Monitoring
+
+- Add screen view tracking.
+- Add error reporting.
+- Track user interactions with categories/highlights.
+
+### 10. Feature Enhancements
+
+- Allow search to filter categories/brands.
+- Implement sorting/filtering on the PLP page.
+- Add wishlist + add-to-cart interactions in PD.
+- Instead of a button to the "brands list" I'd create a bradns carousel (or similar) on the CategoryEntryScreen.
+- Add Brand Page like a catalog of sort.
+
+These improvements would make the application scalable, resilient, and more aligned with real-world e-commerce app requirements.
