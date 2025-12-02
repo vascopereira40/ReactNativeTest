@@ -350,13 +350,6 @@ performance, testing, and UX:
 - Better contrast, scalable fonts, and focus indicators.
 - Accessible touch areas for cards and buttons.
 
-### 5. UI/UX Enhancements
-
-- Improve transitions/animations between category levels.
-- Add a sticky search bar with debounce.
-- Brand carousel rather than a single row.
-- Better placeholder skeletons (fade-in shimmer).
-
 ### 6. Performance Optimizations
 
 - Memoize heavy components.
@@ -374,12 +367,15 @@ performance, testing, and UX:
 - Add error reporting.
 - Track user interactions with categories/highlights.
 
-### 10. Feature Enhancements
+### 9. UI/UX Enhancements
 
+- Improve transitions/animations between category levels.
+- Add a sticky search bar with debounce.
+- Instead of a button to the "brands list" I'd create a bradns carousel (or similar) on the CategoryEntryScreen.
+- Add Brand Page like a catalog of sort.
+- Better placeholder skeletons (fade-in shimmer).
 - Allow search to filter categories/brands.
 - Implement sorting/filtering on the PLP page.
 - Add wishlist + add-to-cart interactions in PD.
-- Instead of a button to the "brands list" I'd create a bradns carousel (or similar) on the CategoryEntryScreen.
-- Add Brand Page like a catalog of sort.
 
 These improvements would make the application scalable, resilient, and more aligned with real-world e-commerce app requirements.
