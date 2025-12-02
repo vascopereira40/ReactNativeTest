@@ -22,8 +22,6 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
   TouchableOpacity,
   Linking,
 } from "react-native";
@@ -39,6 +37,8 @@ import { BrandsRow } from "../components/BrandsRow";
 import { SkeletonBlock } from "../components/SkeletonBlock";
 import { HighlightCard as HighlightCardType } from "../types/highlights";
 import { CategoryNode, BrandsNode } from "../types/categories";
+import { GlobalStyles } from "../styles/globals";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -192,12 +192,12 @@ export const CategoryEntryScreen: React.FC = () => {
     if (cards.length !== 4) return null; // extra safety
 
     return (
-      <View style={styles.highlightContainer}>
-        <Text style={styles.sectionTitle}>Highlights</Text>
+      <View style={GlobalStyles.highlightContainer}>
+        <Text style={GlobalStyles.sectionTitle}>Highlights</Text>
 
-        <View style={styles.highlightGrid}>
+        <View style={GlobalStyles.highlightGrid}>
           {cards.map((card) => (
-            <View key={card.id} style={styles.highlightItem}>
+            <View key={card.id} style={GlobalStyles.highlightItem}>
               <HighlightCard
                 card={card}
                 onPress={() => handleHighlightPress(card)}
@@ -267,17 +267,17 @@ export const CategoryEntryScreen: React.FC = () => {
 
       case "highlight-skeleton":
         return (
-          <View style={styles.highlightContainer}>
+          <View style={GlobalStyles.highlightContainer}>
             <SkeletonBlock
               height={20}
               width={140}
               style={{ marginBottom: 12 }}
             />
-            <View style={styles.highlightGrid}>
-              <SkeletonBlock style={styles.highlightItem} height={120} />
-              <SkeletonBlock style={styles.highlightItem} height={120} />
-              <SkeletonBlock style={styles.highlightItem} height={120} />
-              <SkeletonBlock style={styles.highlightItem} height={120} />
+            <View style={GlobalStyles.highlightGrid}>
+              <SkeletonBlock style={GlobalStyles.highlightItem} height={120} />
+              <SkeletonBlock style={GlobalStyles.highlightItem} height={120} />
+              <SkeletonBlock style={GlobalStyles.highlightItem} height={120} />
+              <SkeletonBlock style={GlobalStyles.highlightItem} height={120} />
             </View>
           </View>
         );
@@ -294,7 +294,7 @@ export const CategoryEntryScreen: React.FC = () => {
         return (
           <SkeletonBlock
             height={50}
-            style={{ marginHorizontal: 16, marginBottom: 12 }}
+            style={{ marginHorizontal: 0, marginBottom: 12 }}
           />
         );
 
@@ -305,7 +305,7 @@ export const CategoryEntryScreen: React.FC = () => {
         return (
           <SkeletonBlock
             height={50}
-            style={{ marginHorizontal: 16, marginTop: 12 }}
+            style={{ marginHorizontal: 0, marginTop: 12 }}
           />
         );
 
@@ -317,30 +317,35 @@ export const CategoryEntryScreen: React.FC = () => {
   // --- Hard error (no cache) ---
   if (isError && !categoryTree && !highlights) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.center}>
-          <Text style={styles.errorTitle}>Something went wrong</Text>
-          <Text style={styles.errorText}>
-            We couldn't load categories. Please try again.
-          </Text>
-          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
-            <Text style={styles.retryText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
+      <SafeAreaView
+        edges={["bottom", "left", "right"]}
+        style={[GlobalStyles.screen, GlobalStyles.center]}
+      >
+        <Text style={GlobalStyles.errorTitle}>Something went wrong</Text>
+        <Text style={GlobalStyles.errorText}>Please try again.</Text>
+        <TouchableOpacity
+          style={GlobalStyles.retryButton}
+          onPress={handleRetry}
+        >
+          <Text style={GlobalStyles.retryText}>Retry</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView
+      edges={["bottom", "left", "right"]}
+      style={[GlobalStyles.screen]}
+    >
       {/* Banner shown only if:
            - The latest request failed
            - BUT React Query still has cached data 
           This matches the test requirement:
             “If the call fails but cache exists: show cached data + indicator"  */}
       {isUsingCache && (
-        <View style={styles.cacheBanner}>
-          <Text style={styles.cacheText}>Using cached data</Text>
+        <View style={GlobalStyles.cacheBanner}>
+          <Text style={GlobalStyles.cacheText}>Using cached data</Text>
         </View>
       )}
 
@@ -354,78 +359,8 @@ export const CategoryEntryScreen: React.FC = () => {
           <SearchBar value={search} onChangeText={setSearch} />
         }
         stickyHeaderIndices={[0]} // sticky search bar
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[GlobalStyles.listContent]}
       />
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f3f3f3",
-  },
-  listContent: {
-    paddingBottom: 16,
-  },
-  highlightContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 8,
-  },
-  highlightGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  highlightItem: {
-    width: "48%", // forces 2 items per row (2 cols)
-    marginBottom: 8,
-  },
-  skeletonContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-  },
-  cacheBanner: {
-    backgroundColor: "#fff3cd",
-    padding: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cacheText: {
-    color: "#856404",
-    fontSize: 13,
-  },
-  center: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 24,
-  },
-  errorTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 8,
-  },
-  errorText: {
-    fontSize: 14,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  retryButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#007bff",
-  },
-  retryText: {
-    color: "white",
-    fontWeight: "600",
-  },
-});

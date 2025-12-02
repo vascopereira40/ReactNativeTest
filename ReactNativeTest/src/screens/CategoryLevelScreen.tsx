@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   FlatList,
   StyleSheet,
   TouchableOpacity,
@@ -14,6 +13,8 @@ import { useCategoryTree } from "../hooks/useCategoryTree";
 import { CategoryNode } from "../types/categories";
 import { CategoryRow } from "../components/CategoryRow";
 import { SkeletonBlock } from "../components/SkeletonBlock";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GlobalStyles } from "../styles/globals";
 
 type CategoryLevelRouteProp = RouteProp<RootStackParamList, "CategoryLevel">;
 type NavigationProp = NativeStackNavigationProp<
@@ -151,7 +152,7 @@ export const CategoryLevelScreen: React.FC = () => {
             activeOpacity={0.8}
           >
             <Text style={styles.viewAllText}>
-              View all in {currentCategory?.name ?? categoryName}
+              View all in {currentCategory?.name ?? categoryName} {"›"}
             </Text>
           </TouchableOpacity>
         );
@@ -165,12 +166,7 @@ export const CategoryLevelScreen: React.FC = () => {
         );
 
       case "skeleton":
-        return (
-          <SkeletonBlock
-            height={50}
-            style={{ marginHorizontal: 16, marginVertical: 6 }}
-          />
-        );
+        return <SkeletonBlock height={50} style={{ marginVertical: 6 }} />;
 
       default:
         return null;
@@ -180,16 +176,18 @@ export const CategoryLevelScreen: React.FC = () => {
   // Hard error and no cached data
   if (isError && !categoryTree) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.center}>
-          <Text style={styles.errorTitle}>Something went wrong</Text>
-          <Text style={styles.errorText}>
-            We couldn’t load this category. Please try again.
-          </Text>
-          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
-            <Text style={styles.retryText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
+      <SafeAreaView
+        edges={["bottom", "left", "right"]}
+        style={[GlobalStyles.screen, GlobalStyles.center]}
+      >
+        <Text style={GlobalStyles.errorTitle}>Something went wrong</Text>
+        <Text style={GlobalStyles.errorText}>Please try again.</Text>
+        <TouchableOpacity
+          style={GlobalStyles.retryButton}
+          onPress={handleRetry}
+        >
+          <Text style={GlobalStyles.retryText}>Retry</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -197,22 +195,26 @@ export const CategoryLevelScreen: React.FC = () => {
   // Category not found (edge case)
   if (!isLoading && categoryTree && !currentCategory) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.center}>
-          <Text style={styles.errorTitle}>Category not found</Text>
-          <Text style={styles.errorText}>
-            This category could not be found in the tree.
-          </Text>
-        </View>
+      <SafeAreaView
+        edges={["bottom", "left", "right"]}
+        style={[GlobalStyles.screen, GlobalStyles.center]}
+      >
+        <Text style={GlobalStyles.errorTitle}>Category not found</Text>
+        <Text style={GlobalStyles.errorText}>
+          This category could not be found in the tree.
+        </Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView
+      edges={["bottom", "left", "right"]}
+      style={GlobalStyles.screen}
+    >
       {isUsingCache && (
-        <View style={styles.cacheBanner}>
-          <Text style={styles.cacheText}>Using cached data</Text>
+        <View style={GlobalStyles.cacheBanner}>
+          <Text style={GlobalStyles.cacheText}>Using cached data</Text>
         </View>
       )}
 
@@ -220,67 +222,21 @@ export const CategoryLevelScreen: React.FC = () => {
         data={listItems}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={GlobalStyles.listContent}
       />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f3f3f3",
-  },
-  listContent: {
-    paddingVertical: 8,
-  },
   viewAllRow: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "white",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    alignItems: "flex-end",
   },
   viewAllText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#007bff",
-  },
-  cacheBanner: {
-    backgroundColor: "#fff3cd",
-    padding: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cacheText: {
-    color: "#856404",
-    fontSize: 13,
-  },
-  center: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 24,
-  },
-  errorTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 8,
-  },
-  errorText: {
-    fontSize: 14,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  retryButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#007bff",
-  },
-  retryText: {
-    color: "white",
-    fontWeight: "600",
+    color: "gray",
   },
 });

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
+import { Colors, GlobalStyles, Spacing } from "../styles/globals";
 
 type Props = {
   value: string;
@@ -7,14 +8,18 @@ type Props = {
   placeholder?: string;
 };
 
-export const SearchBar: React.FC<Props> = ({ value, onChangeText, placeholder }) => {
+export const SearchBar: React.FC<Props> = ({
+  value,
+  onChangeText,
+  placeholder,
+}) => {
   return (
     <View style={styles.container}>
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder ?? "Search categories"}
-        style={styles.input}
+        style={GlobalStyles.input}
       />
     </View>
   );
@@ -22,16 +27,7 @@ export const SearchBar: React.FC<Props> = ({ value, onChangeText, placeholder })
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: "white",
-  },
-  input: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: "#fafafa",
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.background,
   },
 });

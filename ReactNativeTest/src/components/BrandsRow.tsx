@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { BrandsNode } from "../types/categories";
+import { GlobalStyles } from "../styles/globals";
 
 type Props = {
   brands: BrandsNode;
@@ -10,7 +11,7 @@ type Props = {
 export const BrandsRow: React.FC<Props> = ({ brands, onPress }) => {
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={GlobalStyles.brandsRow}
       onPress={onPress}
       activeOpacity={0.8}
     >
@@ -29,8 +30,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
   },
   left: {
     flexDirection: "row",

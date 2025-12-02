@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { HighlightCard as HighlightCardType } from "../types/highlights";
+import { GlobalStyles, Spacing } from "../styles/globals";
 
 type Props = {
   card: HighlightCardType;
@@ -9,7 +10,11 @@ type Props = {
 
 export const HighlightCard: React.FC<Props> = ({ card, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
+    <TouchableOpacity
+      style={GlobalStyles.highlightCard}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
       <Image source={{ uri: card.image }} style={styles.image} />
       <Text style={styles.title} numberOfLines={2}>
         {card.title}
@@ -19,20 +24,12 @@ export const HighlightCard: React.FC<Props> = ({ card, onPress }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 4,
-    borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "white",
-    elevation: 2,
-  },
   image: {
     width: "100%",
     height: 80,
   },
   title: {
-    padding: 8,
+    padding: Spacing.sm,
     fontSize: 14,
     fontWeight: "500",
   },

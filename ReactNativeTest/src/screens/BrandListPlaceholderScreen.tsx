@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Colors, GlobalStyles, Typography } from "../styles/globals";
 
 /**
  * BrandListPlaceholderScreen
@@ -19,17 +20,17 @@ import { View, Text, StyleSheet } from "react-native";
 
 export const BrandListPlaceholderScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Brands</Text>
+    <View style={[GlobalStyles.screen, { paddingTop: 20 }]}>
+      <Text style={Typography.title}>Brands</Text>
 
       <View style={styles.infoBox}>
-        <Text style={styles.label}>Route Parameters Received</Text>
-        <Text style={styles.value}>
+        <Text style={GlobalStyles.label}>Route Parameters Received</Text>
+        <Text style={GlobalStyles.value}>
           None (this route does not accept params)
         </Text>
       </View>
 
-      <View style={styles.detailBox}>
+      <View style={GlobalStyles.card}>
         <Text style={styles.detailText}>
           This is the placeholder screen for the Brands section.
         </Text>
@@ -39,7 +40,7 @@ export const BrandListPlaceholderScreen: React.FC = () => {
         <Text style={styles.codeText}>route: {"{ screen: 'BRAND_LIST' }"}</Text>
       </View>
 
-      <Text style={styles.hint}>
+      <Text style={Typography.small}>
         In a real application, this would render a list of available brands.
       </Text>
     </View>
@@ -47,31 +48,11 @@ export const BrandListPlaceholderScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    backgroundColor: "#f3f3f3",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    marginBottom: 16,
-  },
   infoBox: {
     padding: 12,
     borderRadius: 12,
-    backgroundColor: "white",
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  value: {
-    fontSize: 13,
-    color: "#444",
+    backgroundColor: Colors.surface,
+    marginVertical: 16,
   },
   detailBox: {
     padding: 12,
@@ -87,13 +68,8 @@ const styles = StyleSheet.create({
   codeText: {
     fontSize: 13,
     fontFamily: "monospace",
-    backgroundColor: "#eee",
+    backgroundColor: "#d6d6d6ff",
     padding: 4,
     borderRadius: 6,
-  },
-  hint: {
-    fontSize: 12,
-    color: "#777",
-    marginTop: 12,
   },
 });
