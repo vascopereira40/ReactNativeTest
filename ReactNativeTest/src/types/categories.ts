@@ -15,8 +15,7 @@ export interface CategoryNode {
 
 export interface BrandsNode {
   id: string;
-  name: string;
-  image: string;
+  name: string; 
   // route will always go to BrandListPlaceholder
   route: { screen: "BRAND_LIST" };
 }

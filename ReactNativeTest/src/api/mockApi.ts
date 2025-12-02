@@ -142,7 +142,6 @@ const mockCategoryTree: CategoryTreeResponse = {
   brands: {
     id: "brands-root",
     name: "Brands",
-    image: "https://via.placeholder.com/200",
     route: {
       screen: "BRAND_LIST",
     },
