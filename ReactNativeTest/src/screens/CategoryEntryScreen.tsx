@@ -354,6 +354,7 @@ export const CategoryEntryScreen: React.FC = () => {
       <FlatList
         data={listItems}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         ListHeaderComponent={
           <SearchBar value={search} onChangeText={setSearch} />

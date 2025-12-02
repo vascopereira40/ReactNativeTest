@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { CategoryNode } from "../types/categories";
 import { GlobalStyles } from "../styles/globals";
+import Octicons from "@expo/vector-icons/Octicons";
 
 type Props = {
   category: CategoryNode;
@@ -21,7 +22,7 @@ export const CategoryRow: React.FC<Props> = ({ category, onPress }) => {
         <Image source={{ uri: category.image }} style={styles.image} />
         <Text style={styles.name}>{category.name}</Text>
       </View>
-      <Text style={styles.chevron}>{hasChildren ? "›" : ""}</Text>
+      <Octicons name="chevron-right" size={24} color="black" />
     </TouchableOpacity>
   );
 };
@@ -33,17 +34,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   image: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    backgroundColor: "#eee",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#c9c9c9ff",
   },
   name: {
     fontSize: 16,
     fontWeight: "500",
-  },
-  chevron: {
-    fontSize: 20,
-    color: "#ccc",
   },
 });

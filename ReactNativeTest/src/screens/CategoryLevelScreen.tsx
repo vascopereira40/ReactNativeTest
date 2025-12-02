@@ -15,6 +15,7 @@ import { CategoryRow } from "../components/CategoryRow";
 import { SkeletonBlock } from "../components/SkeletonBlock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GlobalStyles } from "../styles/globals";
+import Octicons from "@expo/vector-icons/Octicons";
 
 type CategoryLevelRouteProp = RouteProp<RootStackParamList, "CategoryLevel">;
 type NavigationProp = NativeStackNavigationProp<
@@ -152,7 +153,12 @@ export const CategoryLevelScreen: React.FC = () => {
             activeOpacity={0.8}
           >
             <Text style={styles.viewAllText}>
-              View all in {currentCategory?.name ?? categoryName} {"›"}
+              View all in {currentCategory?.name ?? categoryName}
+              <Octicons
+                name="chevron-right"
+                size={12}
+                color={styles.viewAllText.color}
+              />
             </Text>
           </TouchableOpacity>
         );
@@ -220,6 +226,7 @@ export const CategoryLevelScreen: React.FC = () => {
 
       <FlatList
         data={listItems}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={GlobalStyles.listContent}

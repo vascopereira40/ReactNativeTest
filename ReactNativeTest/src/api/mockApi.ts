@@ -15,8 +15,9 @@ const shouldFailCategories = false;
 const mockHighlightCards: HighlightCard[] = [
   {
     id: "h1",
-    title: "Summer Deals",
-    image: "https://via.placeholder.com/150",
+    title: "Christmas Deals",
+    image:
+      "https://cdn.pixabay.com/photo/2021/12/30/22/08/presents-6904620_1280.jpg",
     route: {
       src: "INTERNAL",
       screen: "PLP",
@@ -26,7 +27,8 @@ const mockHighlightCards: HighlightCard[] = [
   {
     id: "h2",
     title: "New Arrivals",
-    image: "https://via.placeholder.com/150",
+    image:
+      "https://cdn.pixabay.com/photo/2019/07/14/16/27/pen-4337521_1280.jpg",
     route: {
       src: "INTERNAL",
       screen: "CLP",
@@ -36,16 +38,18 @@ const mockHighlightCards: HighlightCard[] = [
   {
     id: "h3",
     title: "Top Brands",
-    image: "https://via.placeholder.com/150",
+    image:
+      "https://cdn.pixabay.com/photo/2018/01/15/03/01/feedback-3083100_1280.jpg",
     route: {
       src: "EXTERNAL",
-      url: "https://example.com/top-brands",
+      url: "https://www.capgemini.com/pt-en/about-us/capgemini-portugal/",
     },
   },
   {
     id: "h4",
-    title: "Trending Now",
-    image: "https://via.placeholder.com/150",
+    title: "For your home",
+    image:
+      "https://cdn.pixabay.com/photo/2017/09/09/18/25/living-room-2732939_1280.jpg",
     route: {
       src: "INTERNAL",
       screen: "PD",
@@ -58,31 +62,43 @@ const mockCategoryTree: CategoryTreeResponse = {
   categories: [
     {
       id: "cat-electronics",
-      name: "Electronics",
-      image: "https://via.placeholder.com/200",
+      name: "Smartphones and Smartwatches",
+      image:
+        "https://cdn.pixabay.com/photo/2015/11/03/18/41/iphone-1021297_1280.jpg",
       route: { screen: "CLP", params: { id: "cat-electronics" } },
       children: [
         {
-          id: "cat-phones",
-          name: "Phones",
-          image: "https://via.placeholder.com/200",
-          route: { screen: "CLP", params: { id: "cat-phones" } },
+          id: "cat-smartphones",
+          name: "Smartphones",
+          image:
+            "https://cdn.pixabay.com/photo/2020/01/15/06/37/black-4766998_1280.jpg",
+          route: { screen: "CLP", params: { id: "cat-smartphones" } },
           children: [
             {
-              id: "cat-smartphones",
-              name: "Smartphones",
-              image: "https://via.placeholder.com/200",
-              route: { screen: "PLP", params: { id: "cat-smartphones" } },
+              id: "cat-samsung",
+              name: "Samsung",
+              image:
+                "https://cdn.pixabay.com/photo/2020/01/15/06/37/black-4766998_1280.jpg",
+              route: { screen: "PLP", params: { id: "cat-samsung" } },
               children: [],
             },
             {
-              id: "cat-featurephones",
-              name: "Feature Phones",
-              image: "https://via.placeholder.com/200",
-              route: { screen: "PLP", params: { id: "cat-featurephones" } },
+              id: "cat-iphone",
+              name: "iPhone",
+              image:
+                "https://cdn.pixabay.com/photo/2014/08/05/10/27/iphone-410311_1280.jpg",
+              route: { screen: "PLP", params: { id: "cat-iphone" } },
               children: [],
             },
           ],
+        },
+        {
+          id: "cat-smartwatch",
+          name: "Smartwatches",
+          image:
+            "https://cdn.pixabay.com/photo/2023/10/07/14/24/smartwatch-8300238_1280.jpg",
+          route: { screen: "PLP", params: { id: "cat-smartwatch" } },
+          children: [],
         },
       ],
     },
@@ -90,19 +106,22 @@ const mockCategoryTree: CategoryTreeResponse = {
     {
       id: "cat-fashion",
       name: "Fashion",
-      image: "https://via.placeholder.com/200",
+      image:
+        "https://cdn.pixabay.com/photo/2020/08/24/21/44/man-5515150_1280.jpg",
       route: { screen: "CLP", params: { id: "cat-fashion" } },
       children: [
         {
           id: "cat-men",
           name: "Men",
-          image: "https://via.placeholder.com/200",
+          image:
+            "https://cdn.pixabay.com/photo/2020/08/24/21/44/man-5515150_1280.jpg",
           route: { screen: "CLP", params: { id: "cat-men" } },
           children: [
             {
               id: "cat-men-shirts",
               name: "Shirts",
-              image: "https://via.placeholder.com/200",
+              image:
+                "https://cdn.pixabay.com/photo/2020/08/24/21/44/man-5515150_1280.jpg",
               route: { screen: "PLP", params: { id: "cat-men-shirts" } },
               children: [],
             },
@@ -114,13 +133,15 @@ const mockCategoryTree: CategoryTreeResponse = {
     {
       id: "cat-home",
       name: "Home & Kitchen",
-      image: "https://via.placeholder.com/200",
+      image:
+        "https://cdn.pixabay.com/photo/2014/08/11/21/26/kitchen-416027_1280.jpg",
       route: { screen: "CLP", params: { id: "cat-home" } },
       children: [
         {
           id: "cat-cookware",
           name: "Cookware",
-          image: "https://via.placeholder.com/200",
+          image:
+            "https://cdn.pixabay.com/photo/2013/09/16/10/56/cookware-182788_1280.jpg",
           route: { screen: "PLP", params: { id: "cat-cookware" } },
           children: [],
         },
@@ -130,13 +151,15 @@ const mockCategoryTree: CategoryTreeResponse = {
     {
       id: "cat-sports",
       name: "Sports",
-      image: "https://via.placeholder.com/200",
+      image:
+        "https://cdn.pixabay.com/photo/2014/10/22/18/04/man-498473_1280.jpg",
       route: { screen: "CLP", params: { id: "cat-sports" } },
       children: [
         {
           id: "cat-outdoor",
           name: "Outdoor",
-          image: "https://via.placeholder.com/200",
+          image:
+            "https://cdn.pixabay.com/photo/2014/10/22/18/04/man-498473_1280.jpg",
           route: { screen: "PLP", params: { id: "cat-outdoor" } },
           children: [],
         },
@@ -146,37 +169,24 @@ const mockCategoryTree: CategoryTreeResponse = {
     {
       id: "cat-books",
       name: "Books",
-      image: "https://via.placeholder.com/200",
+      image:
+        "https://cdn.pixabay.com/photo/2017/04/27/13/14/book-2265490_1280.jpg",
       route: { screen: "PLP", params: { id: "cat-books" } },
-      children: [],
-    },
-
-    {
-      id: "cat-beauty",
-      name: "Beauty",
-      image: "https://via.placeholder.com/200",
-      route: { screen: "PLP", params: { id: "cat-beauty" } },
-      children: [],
-    },
-
-    {
-      id: "cat-grocery",
-      name: "Grocery",
-      image: "https://via.placeholder.com/200",
-      route: { screen: "PLP", params: { id: "cat-grocery" } },
       children: [],
     },
 
     {
       id: "cat-toys",
       name: "Toys",
-      image: "https://via.placeholder.com/200",
+      image:
+        "https://cdn.pixabay.com/photo/2019/04/14/20/05/duck-meet-4127713_1280.jpg",
       route: { screen: "CLP", params: { id: "cat-toys" } },
       children: [
         {
           id: "cat-learning",
           name: "Learning Toys",
-          image: "https://via.placeholder.com/200",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/14/20/05/duck-meet-4127713_1280.jpg",
           route: { screen: "PLP", params: { id: "cat-learning" } },
           children: [],
         },
@@ -193,8 +203,8 @@ const mockCategoryTree: CategoryTreeResponse = {
 };
 
 // --- Endpoints ---
-const API_DELAY_MS_cATEGORY = 1500;
-const API_DELAY_MS_HIGHLIGHT = 2000;
+const API_DELAY_MS_cATEGORY = 800;
+const API_DELAY_MS_HIGHLIGHT = 1200;
 
 export const getHighlightContent = async (): Promise<HighlightCard[]> => {
   await delay(API_DELAY_MS_HIGHLIGHT);
