@@ -69,7 +69,7 @@ const mockCategoryTree: CategoryTreeResponse = {
       name: "Electronics",
       image: "https://via.placeholder.com/200",
       route: {
-        screen: "PLP",
+        screen: "CLP", // parent → CLP
         params: { id: "cat-electronics" },
       },
       children: [
@@ -78,7 +78,7 @@ const mockCategoryTree: CategoryTreeResponse = {
           name: "Phones",
           image: "https://via.placeholder.com/200",
           route: {
-            screen: "CLP",
+            screen: "CLP", // mid-level → CLP
             params: { id: "cat-phones" },
           },
           children: [
@@ -87,7 +87,7 @@ const mockCategoryTree: CategoryTreeResponse = {
               name: "Smartphones",
               image: "https://via.placeholder.com/200",
               route: {
-                screen: "PLP",
+                screen: "PLP", // leaf → PLP
                 params: { id: "cat-smartphones" },
               },
               children: [],
@@ -101,7 +101,7 @@ const mockCategoryTree: CategoryTreeResponse = {
       name: "Clothing",
       image: "https://via.placeholder.com/200",
       route: {
-        screen: "PLP",
+        screen: "CLP",
         params: { id: "cat-clothing" },
       },
       children: [
@@ -110,18 +110,19 @@ const mockCategoryTree: CategoryTreeResponse = {
           name: "Men",
           image: "https://via.placeholder.com/200",
           route: {
-            screen: "CLP",
+            screen: "PLP", // leaf
             params: { id: "cat-men" },
           },
           children: [],
         },
       ],
-    }, {
+    },
+    {
       id: "cat-music",
       name: "Music",
       image: "https://via.placeholder.com/200",
       route: {
-        screen: "PLP",
+        screen: "CLP",
         params: { id: "cat-music" },
       },
       children: [
@@ -130,7 +131,7 @@ const mockCategoryTree: CategoryTreeResponse = {
           name: "Instruments",
           image: "https://via.placeholder.com/200",
           route: {
-            screen: "CLP",
+            screen: "PLP", // could be CLP if you add more depth
             params: { id: "cat-instruments" },
           },
           children: [],
@@ -149,7 +150,7 @@ const mockCategoryTree: CategoryTreeResponse = {
 };
 
 // --- Endpoints ---
-const API_DELAY_MS_cATEGORY = 800; 
+const API_DELAY_MS_cATEGORY = 1500; 
 const API_DELAY_MS_HIGHLIGHT = 2000;
 
 export const getHighlightContent = async (): Promise<HighlightCard[]> => {

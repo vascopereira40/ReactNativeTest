@@ -1,10 +1,286 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useMemo } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/navigation";
+import { useCategoryTree } from "../hooks/useCategoryTree";
+import { CategoryNode } from "../types/categories";
+import { CategoryRow } from "../components/CategoryRow";
+import { SkeletonBlock } from "../components/SkeletonBlock";
 
-export const CategoryLevelScreen = () => {
+type CategoryLevelRouteProp = RouteProp<RootStackParamList, "CategoryLevel">;
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "CategoryLevel"
+>;
+
+/**
+ * CategoryLevelScreen
+ *
+ * For a category that has children:
+ *  - Header handled by navigator (back + category name)
+ *  - First row: “View all in {CategoryName}” → uses category.route
+ *  - Then list all children:
+ *      • If child has children → navigate deeper to CategoryLevelScreen
+ *      • If leaf → navigate to ProductListPlaceholder
+ *  - Supports at least 2 levels of depth via recursive navigation.
+ */
+
+const findCategoryById = (
+  nodes: CategoryNode[],
+  id: string
+): CategoryNode | null => {
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    if (node.children && node.children.length > 0) {
+      const found = findCategoryById(node.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+type ListItem =
+  | { type: "view-all"; id: "view-all" }
+  | { type: "child"; id: string; category: CategoryNode }
+  | { type: "skeleton"; id: string };
+
+export const CategoryLevelScreen: React.FC = () => {
+  const route = useRoute<CategoryLevelRouteProp>();
+  const navigation = useNavigation<NavigationProp>();
+  const { categoryId, categoryName } = route.params;
+
+  const {
+    data: categoryTree,
+    isLoading,
+    isError,
+    refetch,
+    isUsingCache,
+  } = useCategoryTree();
+
+  // Find the current category node within the full tree
+  const currentCategory = useMemo(() => {
+    if (!categoryTree?.categories) return null;
+    return findCategoryById(categoryTree.categories, categoryId);
+  }, [categoryTree, categoryId]);
+
+  const children = currentCategory?.children ?? [];
+
+  const listItems: ListItem[] = useMemo(() => {
+    const items: ListItem[] = [];
+
+    if (isLoading && !currentCategory) {
+      // Initial loading skeletons: view all row + child rows
+      items.push({ type: "skeleton", id: "sk-view-all" });
+      items.push(
+        { type: "skeleton", id: "sk-child-1" },
+        { type: "skeleton", id: "sk-child-2" },
+        { type: "skeleton", id: "sk-child-3" }
+      );
+      return items;
+    }
+
+    if (!currentCategory) return items;
+
+    // 1️⃣ View all row
+    items.push({ type: "view-all", id: "view-all" });
+
+    // 2️⃣ Children
+    if (isLoading && children.length === 0) {
+      // Background loading but we have no children yet → skeletons
+      items.push(
+        { type: "skeleton", id: "sk-child-1" },
+        { type: "skeleton", id: "sk-child-2" }
+      );
+    } else {
+      children.forEach((child) => {
+        items.push({ type: "child", id: child.id, category: child });
+      });
+    }
+
+    return items;
+  }, [isLoading, currentCategory, children]);
+
+  const handleRetry = () => {
+    refetch();
+  };
+
+  const handleViewAllPress = () => {
+    if (!currentCategory) return;
+
+    navigation.navigate("ProductListPlaceholder", {
+      source: "category",
+      id: currentCategory.route.params.id,
+      screenType: currentCategory.route.screen,
+    });
+  };
+
+  const handleChildPress = (child: CategoryNode) => {
+    const hasChildren = child.children && child.children.length > 0;
+
+    if (hasChildren) {
+      // Navigate deeper into the tree
+      navigation.push("CategoryLevel", {
+        categoryId: child.id,
+        categoryName: child.name,
+      });
+    } else {
+      // Leaf category → product list placeholder
+      navigation.navigate("ProductListPlaceholder", {
+        source: "category",
+        id: child.route.params.id,
+        screenType: child.route.screen,
+      });
+    }
+  };
+
+  const renderItem = ({ item }: { item: ListItem }) => {
+    switch (item.type) {
+      case "view-all":
+        return (
+          <TouchableOpacity
+            style={styles.viewAllRow}
+            onPress={handleViewAllPress}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.viewAllText}>
+              View all in {currentCategory?.name ?? categoryName}
+            </Text>
+          </TouchableOpacity>
+        );
+
+      case "child":
+        return (
+          <CategoryRow
+            category={item.category}
+            onPress={() => handleChildPress(item.category)}
+          />
+        );
+
+      case "skeleton":
+        return (
+          <SkeletonBlock
+            height={50}
+            style={{ marginHorizontal: 16, marginVertical: 6 }}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  // Hard error and no cached data
+  if (isError && !categoryTree) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.center}>
+          <Text style={styles.errorTitle}>Something went wrong</Text>
+          <Text style={styles.errorText}>
+            We couldn’t load this category. Please try again.
+          </Text>
+          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
+            <Text style={styles.retryText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Category not found (edge case)
+  if (!isLoading && categoryTree && !currentCategory) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.center}>
+          <Text style={styles.errorTitle}>Category not found</Text>
+          <Text style={styles.errorText}>
+            This category could not be found in the tree.
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <View>
-      <Text>CategoryLevelScreen - TODO</Text>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      {isUsingCache && (
+        <View style={styles.cacheBanner}>
+          <Text style={styles.cacheText}>Using cached data</Text>
+        </View>
+      )}
+
+      <FlatList
+        data={listItems}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContent}
+      />
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f3f3f3",
+  },
+  listContent: {
+    paddingVertical: 8,
+  },
+  viewAllRow: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  viewAllText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#007bff",
+  },
+  cacheBanner: {
+    backgroundColor: "#fff3cd",
+    padding: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cacheText: {
+    color: "#856404",
+    fontSize: 13,
+  },
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  errorText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  retryButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: "#007bff",
+  },
+  retryText: {
+    color: "white",
+    fontWeight: "600",
+  },
+});

@@ -9,7 +9,7 @@ export const useCategoryTree = () => {
     queryKey: CATEGORY_TREE_QUERY_KEY,
     queryFn: getCategoryTree,
     staleTime: 1000 * 60, // keep fresh for 1 min
-    gcTime: 1000 * 60 * 5,
+    gcTime: 1000* 60 * 5,
   });
 
   // Required: show cached-data banner if request fails but cached data exists

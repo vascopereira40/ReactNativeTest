@@ -9,12 +9,13 @@ type Props = {
 
 export const BrandsRow: React.FC<Props> = ({ brands, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.left}>
-        <Image source={{ uri: brands.image }} style={styles.image} />
-        <Text style={styles.name}>{brands.name}</Text>
-      </View>
-      <Text style={styles.chevron}>›</Text>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      {/* <Image source={{ uri: brands.image }} style={styles.image} /> */}
+      <Text style={styles.name}>{brands.name}</Text>
     </TouchableOpacity>
   );
 };
@@ -23,10 +24,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 8,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 30,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: "#eee",
